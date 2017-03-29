@@ -1,0 +1,3 @@
+COMMANDS = {
+  "PING" => :ping
+}

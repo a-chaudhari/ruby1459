@@ -1,10 +1,14 @@
 require 'socket'
 require_relative 'router'
+require 'observer'
+require 'byebug'
 
 class Irc
+include Observable
 
-  def initalize
+  def initialize
     @s = nil
+    @r = Router.new(@s)
   end
 
   def open
@@ -15,8 +19,9 @@ class Irc
     Thread.new do
       loop{
         msg = @s.gets.chomp
-        # puts msg
-        parse(msg)
+        changed
+        self.parse(msg)
+        notify_observers(Time.now, )
       }
     end
   end
@@ -24,12 +29,15 @@ class Irc
   def parse(msg)
     # puts msg
     chunks = msg.split(' ', 2)
-    p chunks
-    first = chunks[0]
-    if first == "PING"
-      p "ponging!"
-      write("PONG "+ chunks[1])
-    end
+    # p chunks
+    first = chunks.shift
+    # p first
+    # if first == "PING"
+    #   p "ponging!"
+    #   write("PONG "+ chunks[1])
+    # end
+    # debugger
+    @r.route(first,chunks)
   end
 
   def write(msg)
