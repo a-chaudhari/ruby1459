@@ -2,3 +2,6 @@ event types:
 :raw - absolute raw data
 :chan_msg - channel message
 :priv_msg - user to user msg
+
+
+todo:

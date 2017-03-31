@@ -2,6 +2,7 @@
 require 'events'
 require 'socket'
 require 'byebug'
+require_relative 'responses'
 
 class IrcConnection
   # include Observable
@@ -19,6 +20,9 @@ class IrcConnection
     @conn = nil
 
     @realserver = nil
+    @timeout_timer = nil
+    @timeout =  300000
+    @nickTaken = false;
   end
 
   def connect
@@ -29,6 +33,7 @@ class IrcConnection
       emit(:connection_error)
       return
     end
+    self.restart_timer
     emit(:connected)
     self.read
 
@@ -37,18 +42,38 @@ class IrcConnection
     self.write("NICK #{@nickname}")
     #TODO handle taken nicks
     self.write("USER #{@username} * * :#{@realname}")
+  end
 
+  def restart_timer
+    @timeout_timer.kill unless @timeout_timer.nil?
+    @timeout_timer = Thread.new do
+      sleep @timeout
+      self.timeout_reached
+    end
+  end
 
+  def timeout_reached
+    @read_thread.kill
+    emit(:disconnected)
   end
 
   def read
-    Thread.new do
+    @read_thread = Thread.new do
       loop{
-        msg = @conn.gets.chomp
+        msg = @conn.gets
+        break if msg.nil?
+        self.restart_timer
+        msg = msg.chomp
         emit(:raw, msg)
         self.parse(msg)
       }
+      emit(:disconnected)
+      # debugger
     end
+  end
+
+  def method_missing(m, *args)
+    puts "function #{m} is not handled"
   end
 
   def write(msg)
@@ -56,26 +81,35 @@ class IrcConnection
   end
 
   def parse(msg)
-    chunks = msg.split(' ')
 
-    first = chunks.first
     if @realserver.nil?
-      @realserver = first
+      @realserver = msg.split(' ', 2).first
       puts "setting realserver to: #{@realserver}"
     end
+    chunks = msg.split(' ')
+    cmd = extract_command(chunks)
+    p cmd
+    p msg
 
+    emit(cmd)
+    send(cmd, chunks)
+  end
+
+  def ping(chunks)
+    self.write("PONG #{chunks[1]}")
+  end
+
+  def RPL_MOTDSTART(msg)
+
+  end
+
+  def extract_command(chunks)
     cmd_idx = chunks.find_index do |el|
       el != @realserver && el != ":#{@nickname}"
     end
 
-    cmd = chunks.slice!(cmd_idx)
-    p "command: " + cmd
-    p chunks
-
-    if cmd == "PING"
-      self.write("PONG #{chunks}")
-    end
-
+    str = chunks[cmd_idx]
+    REPLIES[str] ? REPLIES[str] : str
   end
 
   def disconnect

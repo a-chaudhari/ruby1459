@@ -1,4 +1,5 @@
 require_relative 'IrcConnection'
+# Thread.abort_on_exception = true
 
 class Test
   def initialize
@@ -26,7 +27,7 @@ class Test
     while true
       line = gets.chomp
       chunks = line.split(' ', 2)
-      # irc.write(line)
+      irc.write(line)
       cmd = chunks.shift
 
     end
