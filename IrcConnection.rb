@@ -3,14 +3,17 @@ require 'events'
 require 'socket'
 require 'byebug'
 require_relative 'responses'
+require_relative 'handlers/ping'
+require_relative 'handlers/motd'
 
 class IrcConnection
-  # include Observable
   include Events::Emitter
+  include Ping
+  include Motd
 
   def initialize(options)
     #takes an options hash
-    @server = options[:server] ||= ""
+    @server = options[:server] ||= "irc.freenode.net" #freenode for testing
     @port = options[:port] ||= 6667
     @password = options[:password] ||= ""
     @nickname = options[:nickname] ||= "defNick73249"
@@ -18,6 +21,7 @@ class IrcConnection
     @realname = options[:realname] ||= "User Name"
     @channels = []
     @conn = nil
+    @server_motd = ""
 
     @realserver = nil
     @timeout_timer = nil
@@ -73,7 +77,7 @@ class IrcConnection
   end
 
   def method_missing(m, *args)
-    puts "function #{m} is not handled"
+    puts "Response #{m} is not handled"
   end
 
   def write(msg)
@@ -91,16 +95,8 @@ class IrcConnection
     p cmd
     p msg
 
-    emit(cmd)
+    emit(cmd, chunks)
     send(cmd, chunks)
-  end
-
-  def ping(chunks)
-    self.write("PONG #{chunks[1]}")
-  end
-
-  def RPL_MOTDSTART(msg)
-
   end
 
   def extract_command(chunks)
@@ -115,6 +111,7 @@ class IrcConnection
   def disconnect
     emit(:disconnecting)
     @conn.close
+    emit(:disconnected)
   end
 
   def joinChannel(channel)
