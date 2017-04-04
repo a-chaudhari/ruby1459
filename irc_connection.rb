@@ -1,15 +1,14 @@
-# require_relative 'irc'
 require 'events'
 require 'socket'
 require 'byebug'
+require_relative 'irc_channel'
 require_relative 'responses'
 require_relative 'handlers/ping'
 require_relative 'handlers/motd'
+require_relative 'handlers/channel'
 
 class IrcConnection
   include Events::Emitter
-  include Ping
-  include Motd
 
   def initialize(options)
     #takes an options hash
@@ -23,6 +22,7 @@ class IrcConnection
     @conn = nil
     @server_motd = ""
 
+    @status = :disconnected
     @realserver = nil
     @timeout_timer = nil
     @timeout =  300000
@@ -59,6 +59,7 @@ class IrcConnection
   def timeout_reached
     @read_thread.kill
     emit(:disconnected)
+    @status = :disconnected
   end
 
   def read
@@ -71,6 +72,7 @@ class IrcConnection
         emit(:raw, msg)
         self.parse(msg)
       }
+      @status = :disconnected
       emit(:disconnected)
       # debugger
     end
@@ -78,9 +80,11 @@ class IrcConnection
 
   def method_missing(m, *args)
     puts "Response #{m} is not handled"
+    p args[0]
   end
 
   def write(msg)
+    p "writing: " + msg
     @conn.puts(msg)
   end
 
@@ -92,8 +96,8 @@ class IrcConnection
     end
     chunks = msg.split(' ')
     cmd = extract_command(chunks)
-    p cmd
-    p msg
+    # p cmd
+    # p msg
 
     emit(cmd, chunks)
     send(cmd, chunks)
@@ -101,7 +105,7 @@ class IrcConnection
 
   def extract_command(chunks)
     cmd_idx = chunks.find_index do |el|
-      el != @realserver && el != ":#{@nickname}"
+      !el.start_with?(@realserver) && !el.start_with?(":#{@nickname}")
     end
 
     str = chunks[cmd_idx]
@@ -114,8 +118,10 @@ class IrcConnection
     emit(:disconnected)
   end
 
-  def joinChannel(channel)
-
+  def createChannel(channel)
+    chan = IrcChannel.new(self, channel)
+    @channels.push(chan)
+    chan
   end
 
   def joinedChannels

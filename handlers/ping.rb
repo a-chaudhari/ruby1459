@@ -1,8 +1,3 @@
-module Ping
-
-  def ping(chunks)
-    self.write("PONG #{chunks[1]}")
-  end
-
-
+def ping(chunks)
+  self.write("PONG #{chunks.drop(1).join(" ")}")
 end

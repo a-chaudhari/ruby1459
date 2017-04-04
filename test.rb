@@ -1,4 +1,4 @@
-require_relative 'IrcConnection'
+require_relative 'irc_connection'
 # Thread.abort_on_exception = true
 
 class Test
