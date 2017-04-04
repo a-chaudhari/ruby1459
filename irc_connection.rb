@@ -1,11 +1,13 @@
 require 'events'
 require 'socket'
 require 'byebug'
+require 'time'
 require_relative 'irc_channel'
 require_relative 'responses'
 require_relative 'handlers/ping'
 require_relative 'handlers/motd'
 require_relative 'handlers/channel'
+require_relative 'handlers/privmsg'
 
 class IrcConnection
   include Events::Emitter
@@ -18,7 +20,7 @@ class IrcConnection
     @nickname = options[:nickname] ||= "defNick73249"
     @username = options[:username] ||= "user"
     @realname = options[:realname] ||= "User Name"
-    @channels = []
+    @channels = {}
     @conn = nil
     @server_motd = ""
 
@@ -27,6 +29,12 @@ class IrcConnection
     @timeout_timer = nil
     @timeout =  300000
     @nickTaken = false;
+  end
+
+  def emit(event, *args)
+    Thread.new do
+      super
+    end
   end
 
   def connect
@@ -60,6 +68,10 @@ class IrcConnection
     @read_thread.kill
     emit(:disconnected)
     @status = :disconnected
+  end
+
+  def query(nickname, msg)
+    write("PRIVMSG #{nickname} #{msg}")
   end
 
   def read
@@ -104,12 +116,8 @@ class IrcConnection
   end
 
   def extract_command(chunks)
-    cmd_idx = chunks.find_index do |el|
-      !el.start_with?(@realserver) && !el.start_with?(":#{@nickname}")
-    end
-
-    str = chunks[cmd_idx]
-    REPLIES[str] ? REPLIES[str] : str
+    str = chunks.find {|el| !REPLIES[el].nil?}
+    str ? REPLIES[str] : chunks.join(' ')
   end
 
   def disconnect
@@ -120,7 +128,7 @@ class IrcConnection
 
   def createChannel(channel)
     chan = IrcChannel.new(self, channel)
-    @channels.push(chan)
+    @channels[channel]=chan
     chan
   end
 

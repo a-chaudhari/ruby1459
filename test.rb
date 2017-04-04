@@ -1,11 +1,11 @@
 require_relative 'irc_connection'
-# Thread.abort_on_exception = true
+Thread.abort_on_exception = true
 
 class Test
   def initialize
     irc = IrcConnection.new({
         server:"irc.freenode.net",
-        nickname:"test2348922"
+        nickname:"zello82"
       })
 
     irc.on(:raw) do |msg|
@@ -20,6 +20,19 @@ class Test
 
     irc.on(:connected) do
       puts "connected!"
+    end
+
+    irc.on(:registered) do
+      puts "registered!"
+      ['#test1234'].each do |name|
+        chan = irc.createChannel(name)
+        chan.on(:chanmsg) do |data|
+          puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
+        end
+        res = chan.join
+        chan.speak("yo")
+        p res
+      end
     end
 
     irc.connect
