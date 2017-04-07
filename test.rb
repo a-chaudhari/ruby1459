@@ -30,7 +30,7 @@ class Test
           puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
         end
         res = chan.join
-        chan.speak("yo")
+        # chan.speak("yo")
         p res
       end
     end
