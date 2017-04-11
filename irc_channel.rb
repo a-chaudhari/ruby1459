@@ -34,7 +34,7 @@ class IrcChannel
 
   def speak(msg)
     return unless @status == :active
-    @conn.write("PRIVMSG #{@channel} #{msg}")
+    @conn.write("PRIVMSG #{@channel} :#{msg}")
   end
 
   def emote(msg)
