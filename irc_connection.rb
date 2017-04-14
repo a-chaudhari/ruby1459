@@ -31,7 +31,7 @@ class IrcConnection
     @nickTaken = false;
   end
 
-  attr_readeri :channels, :server, :nickname, :port, :username, :realname, :server_motd, :status
+  attr_reader :channels, :server, :nickname, :port, :username, :realname, :server_motd, :status
 
   def emit(event, *args)
     Thread.new do
