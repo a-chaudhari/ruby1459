@@ -13,7 +13,7 @@ class IrcChannel
     #active, kicked, banned, invite_only
   end
   attr_accessor :waiting, :users, :status
-  attr_reader :channel
+  attr_reader :channel, :users, :mode
 
   def join
     return if @status == :active
