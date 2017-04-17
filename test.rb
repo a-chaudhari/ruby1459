@@ -24,7 +24,7 @@ class Test
 
     irc.on(:registered) do
       puts "registered!"
-      ['#test1234'].each do |name|
+      ['#test1115'].each do |name|
         chan = irc.createChannel(name)
         chan.on(:chanmsg) do |data|
           puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
@@ -38,10 +38,11 @@ class Test
     irc.connect
 
     while true
-      line = gets.chomp
-      chunks = line.split(' ', 2)
-      irc.write(line)
-      cmd = chunks.shift
+      # line = gets.chomp
+      # chunks = line.split(' ', 2)
+      # irc.write(line)
+      # cmd = chunks.shift
+      sleep(1000)
 
     end
 

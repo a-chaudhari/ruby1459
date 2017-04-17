@@ -1,4 +1,5 @@
 require 'events'
+require 'set'
 
 class IrcChannel
   include Events::Emitter
@@ -8,12 +9,12 @@ class IrcChannel
     @channel = channel
     @status=:parted
     @waiting = true
-    @users = []
+    @users = Set.new
     @mode = ""
     #active, kicked, banned, invite_only
   end
   attr_accessor :waiting, :users, :status
-  attr_reader :channel, :users, :mode
+  attr_reader :channel, :mode
 
   def join
     return if @status == :active
@@ -27,7 +28,7 @@ class IrcChannel
   def part
     @status=:parted
     @waiting = true
-    @users = []
+    @users = Set.new
     @mode = ""
     @conn.write("PART #{@channel}")
   end
@@ -41,8 +42,13 @@ class IrcChannel
 
   end
 
-  def _recv(data)
-    emit(:chanmsg,data)
+  def userlist
+    @users.to_a
+  end
+
+  def _recv(type, data)
+    # p @users
+    emit(type, data)
   end
 
 end

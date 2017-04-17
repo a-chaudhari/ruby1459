@@ -8,6 +8,7 @@ require_relative 'handlers/ping'
 require_relative 'handlers/motd'
 require_relative 'handlers/channel'
 require_relative 'handlers/privmsg'
+require_relative 'handlers/userlist'
 
 class IrcConnection
   include Events::Emitter
@@ -104,11 +105,23 @@ class IrcConnection
 
   def parse(msg)
 
+    chunks = [];
+    temp=""
+    for pos in 0...msg.length do
+      char = msg[pos]
+      if char == ':' || char == ' '
+        chunks.push(temp) if temp.length != 0
+        temp = ""
+      else
+        temp += char
+      end
+    end
+    chunks.push(temp) if temp != ""
+
     if @realserver.nil?
-      @realserver = msg.split(' ', 2).first
+      @realserver = chunks.first
       puts "setting realserver to: #{@realserver}"
     end
-    chunks = msg.split(' ')
     cmd = extract_command(chunks)
     # p cmd
     # p msg
