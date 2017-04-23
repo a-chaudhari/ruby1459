@@ -1,6 +1,6 @@
 require 'events'
 require 'socket'
-require 'byebug'
+# require 'byebug'
 require 'time'
 require_relative 'irc_channel'
 require_relative 'responses'
