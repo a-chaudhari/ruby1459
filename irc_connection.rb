@@ -147,4 +147,8 @@ class IrcConnection
     chan
   end
 
+  def deleteChannel(channel)
+    @channels.delete(channel)
+  end
+
 end
