@@ -38,6 +38,8 @@ def PART(chunks)
   user_str = chunks[0]
   user = user_str.split('!',2).first
 
+  return if channel_obj.nil?
+
   channel_obj.users.delete(user)
   channel_obj._recv(:userlist_changed,nil)
   channel_obj._recv(:chan_part,

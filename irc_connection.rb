@@ -148,6 +148,7 @@ class IrcConnection
   end
 
   def deleteChannel(channel)
+    @channels[channel].part
     @channels.delete(channel)
   end
 
