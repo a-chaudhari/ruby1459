@@ -7,7 +7,6 @@ def privmsg(chunks, raw)
     user_str = chunks[0]
     user = user_str.split('!',2).first
     msg=raw.split(':',3).last
-    debugger
     chan._recv(:chanmsg,
                   { user: user,
                   channel: chan.channel,
