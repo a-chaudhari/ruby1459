@@ -95,7 +95,7 @@ class IrcConnection
 
   def method_missing(m, *args)
     puts "Response #{m} is not handled"
-    p args[0]
+    p args
   end
 
   def write(msg)
@@ -126,8 +126,8 @@ class IrcConnection
     # p cmd
     # p msg
 
-    emit(cmd, chunks)
-    send(cmd, chunks)
+    emit(cmd, chunks, msg)
+    send(cmd, chunks, msg)
   end
 
   def extract_command(chunks)

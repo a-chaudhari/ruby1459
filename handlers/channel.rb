@@ -1,11 +1,11 @@
-def RPL_TOPIC(chunks)
+def RPL_TOPIC(chunks, raw)
   p chunks
   topic = chunks.drop(4).join(' ')
   chan_str = chunks[3]
   @channels[chan_str].topic=topic
 end
 
-def TOPIC(chunks)
+def TOPIC(chunks, raw)
   p chunks
   topic = chunks.drop(3).join(' ')
   chan_str = chunks[2]
@@ -13,20 +13,20 @@ def TOPIC(chunks)
   @channels[chan_str].topic=topic
 end
 
-def RPL_NAMREPLY(chunks)
+def RPL_NAMREPLY(chunks, raw)
   p chunks
   chan = @channels[chunks[4]]
   chan.users.merge(chunks.drop(5))
 end
 
-def RPL_ENDOFNAMES(chunks)
+def RPL_ENDOFNAMES(chunks, raw)
   chan = @channels[chunks[3]]
   p chan.users
   chan.status = :active
   chan.waiting = false
 end
 
-def JOIN(chunks)
+def JOIN(chunks, raw)
   channel = chunks[2]
   channel_obj = @channels[channel]
   user_str = chunks[0]
@@ -43,7 +43,7 @@ def JOIN(chunks)
                         })
 end
 
-def PART(chunks)
+def PART(chunks, raw)
   channel = chunks[2]
   channel_obj = @channels[channel]
   user_str = chunks[0]

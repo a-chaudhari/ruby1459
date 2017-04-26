@@ -9,10 +9,10 @@ class Test
         nickname:"zello82"
       })
 
-    irc.on(:raw) do |msg|
-      # chunks =  msg.split(' ')
-      # p chunks
-    end
+    # irc.on(:raw) do |msg|
+    #   # chunks =  msg.split(' ')
+    #   # p chunks
+    # end
 
     irc.on(:connection_error) do
       puts "connection failed"
