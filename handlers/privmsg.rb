@@ -6,7 +6,8 @@ def privmsg(chunks, raw)
     chan = @channels[target]
     user_str = chunks[0]
     user = user_str.split('!',2).first
-    msg=raw.split(':').last
+    msg=raw.split(':',3).last
+    debugger
     chan._recv(:chanmsg,
                   { user: user,
                   channel: chan.channel,
@@ -18,7 +19,7 @@ end
 
 def handle_query(chunks, raw)
   user_str = chunks[0]
-  msg=raw.split(':').last
+  msg=raw.split(':',3).last
   user = user_str.split('!', 2).first
   emit(:query,{ user: user,
                 user_str: user_str,
