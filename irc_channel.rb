@@ -10,11 +10,12 @@ class IrcChannel
     @status=:parted
     @waiting = true
     @users = Set.new
+    @topic = ""
     @mode = ""
     #active, kicked, banned, invite_only
   end
   attr_accessor :waiting, :users, :status
-  attr_reader :channel, :mode
+  attr_reader :channel, :mode, :topic
 
   def join
     return if @status == :active
@@ -23,6 +24,13 @@ class IrcChannel
       sleep(1)
     end
     @status
+  end
+
+  def topic=(topic)
+    return if topic == @topic
+
+    @topic=topic
+    emit(:new_topic)
   end
 
   def part

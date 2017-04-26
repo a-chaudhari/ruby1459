@@ -1,4 +1,5 @@
 require_relative 'irc_connection'
+require 'byebug'
 Thread.abort_on_exception = true
 
 class Test
@@ -24,7 +25,7 @@ class Test
 
     irc.on(:registered) do
       puts "registered!"
-      ['#test1115'].each do |name|
+      ['#test11153'].each do |name|
         chan = irc.createChannel(name)
         chan.on(:chanmsg) do |data|
           puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
