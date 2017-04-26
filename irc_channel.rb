@@ -30,7 +30,11 @@ class IrcChannel
     return if topic == @topic
 
     @topic=topic
-    emit(:new_topic)
+    emit(:new_topic,{
+        channel: @channel,
+        timestamp: Time.now,
+        topic: @topic
+      })
   end
 
   def part
