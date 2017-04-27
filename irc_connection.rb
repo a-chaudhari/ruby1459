@@ -105,25 +105,10 @@ class IrcConnection
 
   def parse(msg)
 
-    # chunks = [];
-    # temp=""
-    # for pos in 0...msg.length do
-    #   char = msg[pos]
-    #   if char == ':' || char == ' '
-    #     chunks.push(temp) if temp.length != 0
-    #     temp = ""
-    #   else
-    #     temp += char
-    #   end
-    # end
-    # chunks.push(temp) if temp != ""
-    debugger
     chunks = []
     msg.split(':',3).each do |el|
       chunks += el.split(' ')
     end
-
-    debugger
 
     if @realserver.nil?
       @realserver = chunks.first
