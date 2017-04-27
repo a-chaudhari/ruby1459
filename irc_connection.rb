@@ -117,11 +117,13 @@ class IrcConnection
     #   end
     # end
     # chunks.push(temp) if temp != ""
-
+    debugger
     chunks = []
-    msg.split(':',3) do |el|
-      chunks += temp.split(' ')
+    msg.split(':',3).each do |el|
+      chunks += el.split(' ')
     end
+
+    debugger
 
     if @realserver.nil?
       @realserver = chunks.first
