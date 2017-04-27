@@ -102,7 +102,7 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 
 ### Connection Lifecycle Events
 |Event Name|Description
-|-
+|---|---|
 |:connecting|The library is starting to establish the TCP connection
 |:connection_error|failed to establish a TCP connection
 |:connected|TCP connection successful.  Will automatically attempt to register
@@ -114,7 +114,7 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 *** Note: raw server events are in CAPITAL letters and are emitted from IrcConnection.  See `responses.rb` for a full list ***
 
 |Event Name|Description
-|-
+|---|---|
 |:raw|The raw lines received from the server without any parsing
 |:query|A private message from another user
 
@@ -122,7 +122,7 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 *** Note: These properties are only used during the connection process ***
 
 |Property Name|Default Value|Description
-|-
+|---|---|---|
 |server||**Required** - the url of the server
 |port|6667|the port to connect to
 |password||the server password used to connect
@@ -132,27 +132,27 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 
 ### Read-Only Properties
 |Property Name|Description
-|-
+|----|---|
 |server_motd|the info message sent to every user when connecting
 |channels|a hash of every IrcChannel associated with the connection
 
 ### Methods
-|Method Name|Arguments|Description
-|-
-|new| [options] |creates a new IrcConnection class.  Can take optional arguments hash.  See the R/W properties for a list.
-|connect||connects to the irc server
-|query|nickname, msg| sends the `msg` to the desired `nickname`
-|write|msg|sends a raw string over the TCP connection
-|disconnect||closes the connection
-|createChannel|name|creates an IrcConnection object for the desired channel `name`
-|deleteChannel|name|leaves the channel and disassociates the channel from the connection
+|Method Name|Arguments|Description|
+|---------|------------|------------|
+|new| [options] |creates a new IrcConnection class.  Can take optional arguments hash.  See the R/W properties for a list.|
+|connect||connects to the irc server|
+|query|nickname, msg| sends the `msg` to the desired `nickname`|
+|write|msg|sends a raw string over the TCP connection|
+|disconnect||closes the connection|
+|createChannel|name|creates an IrcConnection object for the desired channel `name`|
+|deleteChannel|name|leaves the channel and disassociates the channel from the connection|
 
 
 ___
 ## IrcChannel
 ### Event Lists
 |Event Name|Description
-|-
+|----|---|
 |:new_topic|fired whenever the channel topic is changed
 |:chanmsg|channel recevied a new message from another user
 |:userlist_changed| a user either joined or left the channel
@@ -161,14 +161,14 @@ ___
 
 ### Read-Only Properties
 |Property Name|Description
-|-
+|----|---|
 |topic|the current channel topic
 |userlist|an array of the current users of the channel
 |status|current state of the channel. currently can be either :parted (not joined) or :active (joined and ready)
 
 ### Methods
 |Method Name|Arguments|Description
-|-
+|----|---|---|
 |join||attempts to join the channel
 |part||leaves the channel
 |speak|msg|sends the `msg` to the channel
