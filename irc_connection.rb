@@ -15,10 +15,10 @@ class IrcConnection
 
   def initialize(options)
     #takes an options hash
-    @server = options[:server] ||= "irc.freenode.net" #freenode for testing
+    @server = options[:server] ||= nil #freenode for testing
     @port = options[:port] ||= 6667
     @password = options[:password] ||= ""
-    @nickname = options[:nickname] ||= "defNick73249"
+    @nickname = options[:nickname] ||= nil
     @username = options[:username] ||= "user"
     @realname = options[:realname] ||= "User Name"
     @channels = {}
@@ -105,18 +105,23 @@ class IrcConnection
 
   def parse(msg)
 
-    chunks = [];
-    temp=""
-    for pos in 0...msg.length do
-      char = msg[pos]
-      if char == ':' || char == ' '
-        chunks.push(temp) if temp.length != 0
-        temp = ""
-      else
-        temp += char
-      end
+    # chunks = [];
+    # temp=""
+    # for pos in 0...msg.length do
+    #   char = msg[pos]
+    #   if char == ':' || char == ' '
+    #     chunks.push(temp) if temp.length != 0
+    #     temp = ""
+    #   else
+    #     temp += char
+    #   end
+    # end
+    # chunks.push(temp) if temp != ""
+
+    chunks = []
+    msg.split(':',3) do |el|
+      chunks += temp.split(' ')
     end
-    chunks.push(temp) if temp != ""
 
     if @realserver.nil?
       @realserver = chunks.first
