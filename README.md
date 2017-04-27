@@ -2,7 +2,13 @@
 
 Ruby1459 is an IRC (Internet Relay Chat) library written in Ruby.  It's designed to be used as a client library.  Ruby1459 is object oriented and heavily event driven.  It's under current development and features are still being added regularly.
 
-## IRC Basics
+* [IRC Basics](#basics)
+* [Library features](#features)
+* [Example](#example)
+* [Project status](#status)
+* [API Reference](#api)
+
+## IRC Basics<a name="basics"></a>
 
 IRC is a chat protocol originally developed in the late 80s but formalized in RFC 1459 in 1993.  Despite its age, it's still heavily used by countless people around the world.
 
@@ -10,7 +16,7 @@ IRC communication is passed in text format over a TCP socket usually on port 666
 
 Moderators of a channel have symbols next to their nickname to denote the level of authority they hold.  Exact symbols used, and their meanings, can vary server to server.
 
-# Library Features
+# Library Features<a name="features"></a>
 
 ## Object Oriented
 The library is made of two primary classes, `IRCConnection` and `IRCChannel`.  Use is straight forward.  Create an instance of `IRCConnection` and then create `IRCChannel` instances using the IRCConnection instance.  As the library interacts with the server, the object will be updated to reflect new information and allows easy access.  Such as `channel.userlist` will always hold the current occupants of a channel.  An Object Oriented design is easy to grasp and makes sense in this context.
@@ -24,7 +30,7 @@ Additionally, every command from the server can be directly hooked onto if desir
 ## Multi-Threaded
 The library will spin off a new thread for every IRC connection.  This lets the developer create as many connections as desired.
 
-# Example
+# Example<a name="example"></a>
 
 ````ruby
 #creates a new instance of IrcConnection
@@ -65,7 +71,7 @@ irc.connect
 ````
 The above snippet is a basic usage of the library.  First the connection object is created, then the appropriate events are hooked onto.  And lastly the connect method is invoked that actually connects to the server.  Events can be hooked onto, and channels can be joined, at any time. Even after the server is connected.
 
-# Project Status
+# Project Status<a name="status"></a>
 
 IRC is a sprawling protocol with decades of extensions and improvements.  Work is already underway for the 3rd major version of the protocol, IRCv3.  Furthermore, many major server networks have custom features and have idiosynracities that need to be accounted for and properly handled.  For these reasons this project will be a 'work-in-progress' for a while to come.  I've listed the currently implemented features and I also have a list of the next few features that will be added.
 
@@ -86,7 +92,7 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 * alternative nicknames
 
 
-# API Reference
+# API Reference<a name="api"></a>
 
 ## IrcConnection
 
