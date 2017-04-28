@@ -25,7 +25,7 @@ class Test
 
     irc.on(:registered) do
       puts "registered!"
-      ['#test11153'].each do |name|
+      ['#test111153'].each do |name|
         chan = irc.createChannel(name)
         chan.on(:chanmsg) do |data|
           puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
@@ -35,6 +35,8 @@ class Test
         p res
       end
     end
+
+    irc.on(:raw) {|msg| p msg}
 
     irc.connect
 

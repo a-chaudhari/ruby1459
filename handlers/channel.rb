@@ -16,6 +16,7 @@ end
 def RPL_NAMREPLY(chunks, raw)
   p chunks
   chan = @channels[chunks[4]]
+  # debugger
   chan.users.merge(chunks.drop(5))
 end
 
@@ -32,7 +33,7 @@ def JOIN(chunks, raw)
   user_str = chunks[0]
   user = user_str.split('!',2).first
 
-  channel_obj.users.add(user)
+  # channel_obj.users.add(user)
   channel_obj._recv(:userlist_changed,nil)
   channel_obj._recv(:chan_join,
                       {
