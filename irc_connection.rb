@@ -80,7 +80,14 @@ class IrcConnection
   def read
     @read_thread = Thread.new do
       loop{
-        msg = @conn.gets
+        begin
+          msg = @conn.gets
+        rescue IOError
+          emit(:disconnected)
+          @status = :disconnected
+          puts 'disconnected'
+          break
+        end
         break if msg.nil?
         self.restart_timer
         msg = msg.chomp
