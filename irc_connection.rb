@@ -84,10 +84,11 @@ class IrcConnection
           msg = @conn.gets
         rescue IOError
           emit(:disconnected)
-          @status = :disconnected
-          puts 'disconnected'
+          @status = :disconnected0
+          puts 'disconnected due to IOError'
           break
         end
+
         break if msg.nil?
         self.restart_timer
         msg = msg.chomp
@@ -137,7 +138,7 @@ class IrcConnection
   def disconnect
     emit(:disconnecting)
     @conn.close
-    emit(:disconnected)
+    # emit(:disconnected)
   end
 
   def createChannel(channel)
