@@ -5,6 +5,11 @@ class IrcChannel
   include Events::Emitter
 
   def initialize(conn, channel)
+
+    if channel[0] =~ /\w/
+      raise "channel name is not valid"
+    end
+
     @conn = conn
     @channel = channel
     @status=:parted
@@ -13,6 +18,8 @@ class IrcChannel
     @topic = ""
     @mode = ""
     #active, kicked, banned, invite_only
+
+
   end
   attr_accessor :waiting, :users, :status
   attr_reader :channel, :mode, :topic

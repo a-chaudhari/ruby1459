@@ -9,6 +9,7 @@ require_relative 'handlers/motd'
 require_relative 'handlers/channel'
 require_relative 'handlers/privmsg'
 require_relative 'handlers/userlist'
+require_relative 'handlers/nickname'
 
 class IrcConnection
   include Events::Emitter
@@ -42,12 +43,30 @@ class IrcConnection
 
   def connect
     emit(:connecting)
+
+    if @server.nil?
+      emit(:connection_error)
+      raise "server field cannot be nil"
+    end
+
+    if @nickname.nil?
+      emit(:connection_error)
+      raise "nickname field cannot be nil"
+    end
+
+    unless @port.is_a?(Integer) && @port > 0 && port < 65535
+      emit(:connection_error)
+      raise "port must be an integer greater than 0 and less than 65535"
+    end
+
+
     begin
       @conn = TCPSocket.new @server, @port
     rescue SocketError
       emit(:connection_error)
       return
     end
+
     self.restart_timer
     emit(:connected)
     self.read
@@ -126,7 +145,7 @@ class IrcConnection
     # p cmd
     # p msg
 
-    emit(cmd, chunks, msg)
+    emit(cmd, msg)
     send(cmd, chunks, msg)
   end
 

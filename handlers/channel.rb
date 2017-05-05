@@ -28,12 +28,14 @@ def RPL_ENDOFNAMES(chunks, raw)
 end
 
 def JOIN(chunks, raw)
+  chunks = raw.split(' ') #ipv6 workaround
   channel = chunks[2]
   channel_obj = @channels[channel]
   user_str = chunks[0]
   user = user_str.split('!',2).first
 
   # channel_obj.users.add(user)
+  # debugger
   channel_obj._recv(:userlist_changed,nil)
   channel_obj._recv(:chan_join,
                       {

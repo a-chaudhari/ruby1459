@@ -6,7 +6,7 @@ class Test
   def initialize
     irc = IrcConnection.new({
         server:"irc.freenode.net",
-        nickname:"zello82"
+        nickname:"zelos82"
       })
 
     # irc.on(:raw) do |msg|
@@ -23,17 +23,24 @@ class Test
       puts "connected!"
     end
 
+    irc.on(:ERR_NOSUCHNICK) do |obj|
+      puts "yay error hooked  "
+      p obj
+    end
+
     irc.on(:registered) do
       puts "registered!"
-      ['#test111153'].each do |name|
-        chan = irc.createChannel(name)
-        chan.on(:chanmsg) do |data|
-          puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
-        end
-        res = chan.join
-        # chan.speak("yo")
-        p res
-      end
+      # ['#test111153'].each do |name|
+      #   chan = irc.createChannel(name)
+      #   chan.on(:chanmsg) do |data|
+      #     puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
+      #   end
+      #   res = chan.join
+      #   # chan.speak("yo")
+      #   p res
+      # end
+      irc.query('tet823302','test')
+
     end
 
     irc.on(:raw) {|msg| p msg}
