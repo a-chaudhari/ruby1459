@@ -108,7 +108,13 @@ class IrcConnection
 
   def write(msg)
     p "writing: " + msg
-    @conn.puts(msg)
+    begin
+      @conn.puts(msg)
+    rescue IOError
+      emit(:disconnected)
+      @status = :disconnected
+      puts 'disconnected'
+    end
   end
 
   def parse(msg)
