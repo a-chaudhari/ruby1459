@@ -32,6 +32,7 @@ def JOIN(chunks, raw)
   channel = chunks[2]
   channel_obj = @channels[channel]
   user_str = chunks[0]
+  user_str[0] = ''
   user = user_str.split('!',2).first
 
   # channel_obj.users.add(user)
