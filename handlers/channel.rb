@@ -33,11 +33,11 @@ def JOIN(chunks, raw)
   channel_obj = @channels[channel]
   user_str = chunks[0]
   user_str[0] = ''
-  user = user_str.split('!',2).first
+  user = user_str.split('!', 2).first
 
-  # channel_obj.users.add(user)
+  channel_obj.users.add(user)
   # debugger
-  channel_obj._recv(:userlist_changed,nil)
+  channel_obj._recv(:userlist_changed, nil)
   channel_obj._recv(:chan_join,
                       {
                         user: user,
