@@ -16,7 +16,7 @@ class IrcConnection
 
   def initialize(options)
     #takes an options hash
-    @server = options[:server] ||= nil #freenode for testing
+    @server = options[:server] ||= nil 
     @port = options[:port] ||= 6667
     @password = options[:password] ||= ""
     @nickname = options[:nickname] ||= nil

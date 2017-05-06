@@ -30,16 +30,16 @@ class Test
 
     irc.on(:registered) do
       puts "registered!"
-      # ['#test111153'].each do |name|
-      #   chan = irc.createChannel(name)
-      #   chan.on(:chanmsg) do |data|
-      #     puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
-      #   end
-      #   res = chan.join
-      #   # chan.speak("yo")
-      #   p res
-      # end
-      irc.query('tet823302','test')
+      ['#test1115'].each do |name|
+        chan = irc.createChannel(name)
+        chan.on(:chanmsg) do |data|
+          puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
+        end
+        res = chan.join
+        # chan.speak("yo")
+        p res
+      end
+      # irc.query('tet823302','test')
 
     end
 

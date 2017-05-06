@@ -46,22 +46,48 @@ def JOIN(chunks, raw)
                         })
 end
 
+def QUIT(chunks, raw)
+  chunks = raw.split(' ')
+  quit_msg = chunks[2]
+  quit_msg[0] = ''
+  user_str = chunks[0]
+  user_str[0] = ''
+  user = user_str.split('!', 2).first
+
+  @channels.each do |_, channel_obj|
+    if channel_obj.users.include?(user)
+      channel_obj.users.delete(user)
+      channel_obj._recv(:userlist_changed, nil)
+      channel_obj._recv(:chan_part,
+                          {
+                            user: user,
+                            user_str: user_str,
+                            channel: channel,
+                            timestamp: Time.now,
+                            quit_msg: quit_msg
+                          })
+    end
+  end
+end
+
 def PART(chunks, raw)
+  chunks = raw.split(' ')
   channel = chunks[2]
   channel_obj = @channels[channel]
   user_str = chunks[0]
-  user = user_str.split('!',2).first
+  user_str[0] = ''
+  user = user_str.split('!', 2).first
 
   return if channel_obj.nil?
 
   channel_obj.users.delete(user)
-  channel_obj._recv(:userlist_changed,nil)
+  channel_obj._recv(:userlist_changed, nil)
   channel_obj._recv(:chan_part,
                       {
                         user: user,
                         user_str: user_str,
                         channel: channel,
                         timestamp: Time.now,
-                        quit_msg: quit_msg
-                        })
+                        quit_msg: ""
+                      })
 end
