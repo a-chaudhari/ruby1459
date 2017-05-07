@@ -63,7 +63,7 @@ def QUIT(chunks, raw)
                           {
                             user: user,
                             user_str: user_str,
-                            channel: channel,
+                            channel: channel_obj.channel,
                             timestamp: Time.now,
                             quit_msg: quit_msg
                           })
