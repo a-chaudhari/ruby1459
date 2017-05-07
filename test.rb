@@ -5,7 +5,7 @@ Thread.abort_on_exception = true
 class Test
   def initialize
     irc = IrcConnection.new({
-        server:"irc.freenode.net",
+        server:"irc.prison.net",
         nickname:"zelos82"
       })
 
