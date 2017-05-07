@@ -49,7 +49,7 @@ end
 
 def QUIT(chunks, raw)
   chunks = raw.split(' ')
-  quit_msg = chunks[2]
+  quit_msg = chunks.drop(2).join(' ')
   quit_msg[0] = ''
   user_str = chunks[0]
   user_str[0] = ''
