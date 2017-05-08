@@ -77,7 +77,7 @@ The above snippet is a basic usage of the library.  First the connection object 
 <a name="status"></a>
 # Project Status
 
-IRC is a sprawling protocol with decades of extensions and improvements.  Work is already underway for the 3rd major version of the protocol, IRCv3.  Furthermore, many major server networks have custom features and have idiosynracities that need to be accounted for and properly handled.  For these reasons this project will be a 'work-in-progress' for a while to come.  I've listed the currently implemented features and I also have a list of the next few features that will be added.
+IRC is a sprawling protocol with decades of extensions and improvements.  Work is already underway for the 3rd major version of the protocol, IRCv3.  Furthermore, many major server networks have custom features and have idiosyncrasies that need to be accounted for and properly handled.  For these reasons this project will be a 'work-in-progress' for a while to come.  I've listed the currently implemented features and I also have a list of the next few features that will be added.
 
 ## Currently Implemented Features
 * connecting to servers
@@ -87,13 +87,14 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 * sending and receiving private messages
 * keeping track of joins/parts
 * keeping track of channel topic
+* alternative nicknames
 
 ## Next 5 Features
 * nickserv support
 * whois lookups
 * graceful disconnect of servers
 * channel operator commands
-* alternative nicknames
+* server-pushed channel joins (ie: bouncers)
 
 <a name="api"></a>
 # API Reference
@@ -117,6 +118,7 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 |---|---|
 |:raw|The raw lines received from the server without any parsing
 |:query|A private message from another user
+|:new_nickname|The nickname for the connection has changed
 
 ### Read-Write Properties
 *** Note: These properties are only used during the connection process ***
