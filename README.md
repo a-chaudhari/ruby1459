@@ -118,7 +118,8 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 |---|---|
 |:raw|The raw lines received from the server without any parsing
 |:query|A private message from another user
-|:new_nickname|The nickname for the connection has changed
+|:self_new_nickname|The nickname for the connection has changed
+|:forced_chan_join|The IRC server forced the client into a channel
 
 ### Read-Write Properties
 *** Note: These properties are only used during the connection process ***
@@ -157,7 +158,7 @@ ___
 |----|---|
 |:new_topic|fired whenever the channel topic is changed
 |:chanmsg|channel recevied a new message from another user
-|:userlist_changed| a user either joined or left the channel
+|:userlist_changed| a user either joined or left the channel, or a nickname changed
 |:chan_join| another user joined the channel
 |:chan_part| a user left the channel
 

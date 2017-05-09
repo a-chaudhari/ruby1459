@@ -8,6 +8,8 @@ require_relative 'handlers/motd'
 require_relative 'handlers/channel'
 require_relative 'handlers/privmsg'
 require_relative 'handlers/nickname'
+require_relative 'handlers/topic'
+require_relative 'handlers/userlist'
 
 class IrcConnection
   include Events::Emitter

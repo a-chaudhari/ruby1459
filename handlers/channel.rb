@@ -1,33 +1,13 @@
-def RPL_TOPIC(chunks, raw)
-  topic = chunks.drop(4).join(' ')
-  chan_str = chunks[3]
-  @channels[chan_str].topic = topic
-end
-
-def TOPIC(chunks, raw)
-  topic = chunks.drop(3).join(' ')
-  chan_str = chunks[2]
-  @channels[chan_str].topic = topic
-end
-
-def RPL_NAMREPLY(chunks, raw)
-  chan = @channels[chunks[4]]
-  chan.users.merge(chunks.drop(5))
-end
-
-def RPL_ENDOFNAMES(chunks, raw)
-  chan = @channels[chunks[3]]
-  chan.status = :active
-  chan.waiting = false
-end
-
 def JOIN(chunks, raw)
   channel = chunks[2]
   channel_obj = @channels[channel]
 
   if channel_obj.nil?
-    puts "Forced join detected! " + raw
-    return
+    # this is a server-pushed join.  probably when connecting to a bouncer
+    # or maybe an overflow channel?
+    channel_obj = createChannel(channel)
+    channel_obj.status = :active
+    emit(:forced_chan_join, channel)
   end
 
   user_str = chunks[0]

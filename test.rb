@@ -26,7 +26,6 @@ class Test
 
     irc.on(:ERR_NOSUCHNICK) do |obj|
       puts "yay error hooked  "
-      p obj
 
     end
 
@@ -44,7 +43,7 @@ class Test
 
     end
 
-    # irc.on(:raw) {|msg| p msg}
+    irc.on(:raw) {|msg| puts msg}
 
     irc.connect
 

@@ -1,4 +1,4 @@
-def privmsg(chunks, raw)
+def PRIVMSG(chunks, raw)
   target = chunks[2]
 
   if target == @nickname
