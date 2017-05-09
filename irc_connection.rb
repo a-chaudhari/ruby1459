@@ -55,7 +55,7 @@ class IrcConnection
       raise "nickname must be at least 3 characters long"
     end
 
-    unless @port.is_a?(Integer) && @port > 0 && port < 65535
+    unless @port.is_a?(Integer) && @port > 0 && @port < 65535
       emit(:connection_error)
       raise "port must be an integer greater than 0 and less than 65535"
     end
