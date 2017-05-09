@@ -13,7 +13,7 @@ def JOIN(chunks, raw)
   user_str = chunks[0]
   user = user_str.split('!', 2).first
 
-  channel_obj.users.add(user)
+  channel_obj.users.merge!(nick_hash(user))
   channel_obj._recv(:userlist_changed, nil)
   command = {
     user: user,
@@ -30,7 +30,7 @@ def QUIT(chunks, raw)
   user = user_str.split('!', 2).first
 
   @channels.each do |_, channel_obj|
-    if channel_obj.users.include?(user)
+    if channel_obj.users.keys.include?(user)
       channel_obj.users.delete(user)
       channel_obj._recv(:userlist_changed, nil)
       command = {

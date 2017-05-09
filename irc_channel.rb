@@ -14,7 +14,7 @@ class IrcChannel
     @channel = channel
     @status = :parted
     @waiting = true
-    @users = Set.new
+    @users = {}
     @topic = ""
     @mode = ""
     #active, kicked, banned, invite_only
@@ -47,7 +47,7 @@ class IrcChannel
   def part
     @status = :parted
     @waiting = true
-    @users = Set.new
+    @users = {}
     @mode = ""
     @conn.write("PART #{@channel}")
   end
@@ -63,7 +63,7 @@ class IrcChannel
   end
 
   def userlist
-    @users.to_a
+    @users.keys
   end
 
   def _recv(type, data)

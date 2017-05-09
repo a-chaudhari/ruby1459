@@ -31,14 +31,18 @@ class Test
 
     irc.on(:registered) do
       puts "registered!"
-      ['#test1115'].each do |name|
+      ['#test11155'].each do |name|
         chan = irc.createChannel(name)
         chan.on(:chanmsg) do |data|
           debugger
           puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
         end
+        chan.on(:chan_join) { |o| p chan.users }
+        chan.on(:chan_part) { |o| p chan.users }
         res = chan.join
-        chan.emote("hi")
+        # chan.emote("hi")
+
+        p chan.users
         # chan.speak("yo")
       end
       # irc.query('tet823302','test')

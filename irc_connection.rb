@@ -184,4 +184,25 @@ class IrcConnection
     @channels.delete(channel)
   end
 
+  def has_status?(nick)
+    nick[0] =~ /[+%@&~]/
+  end
+
+  def nick_hash(nick)
+    sym = ''
+    if has_status?(nick)
+      sym = nick[0]
+      nick[0] = ''
+    end
+    { nick => sym }
+  end
+
+  def strip_status(nick)
+    #returns the nickname without any status symbols
+    if has_status?(nick)
+      nick[0] = ''
+    end
+    nick
+  end
+
 end
