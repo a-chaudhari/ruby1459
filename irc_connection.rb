@@ -69,7 +69,7 @@ class IrcConnection
 
     begin
       @conn = TCPSocket.new @server, @port
-    rescue SocketError
+    rescue
       emit(:connection_error)
       return
     end
