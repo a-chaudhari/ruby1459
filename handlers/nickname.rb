@@ -22,7 +22,7 @@ def NICK(chunks, raw)
         users.add(new_nick)
         #TODO handle nicks with status symbols
       end
-      chan._recv(:userlist_changed)
+      chan._recv(:userlist_changed, nil)
       chan._recv(:new_nickname, command)
     end
   end
