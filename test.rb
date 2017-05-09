@@ -34,9 +34,11 @@ class Test
       ['#test1115'].each do |name|
         chan = irc.createChannel(name)
         chan.on(:chanmsg) do |data|
+          debugger
           puts "#{data[:channel]} #{data[:user]}: #{data[:msg]}"
         end
         res = chan.join
+        chan.emote("hi")
         # chan.speak("yo")
       end
       # irc.query('tet823302','test')

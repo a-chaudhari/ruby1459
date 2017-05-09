@@ -88,13 +88,15 @@ IRC is a sprawling protocol with decades of extensions and improvements.  Work i
 * keeping track of joins/parts
 * keeping track of channel topic
 * alternative nicknames
+* emote support
+* server-pushed channel joins (bouncers)
 
-## Next 5 Features
+## Next Features
 * nickserv support
 * whois lookups
 * graceful disconnect of servers
-* channel operator commands
-* server-pushed channel joins (ie: bouncers)
+* server-pushed channel parts
+
 
 <a name="api"></a>
 # API Reference

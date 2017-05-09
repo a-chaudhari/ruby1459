@@ -57,7 +57,10 @@ class IrcChannel
     @conn.write("PRIVMSG #{@channel} :#{msg}")
   end
 
-  def emote(msg) end
+  def emote(msg)
+    return unless @status == :active
+    @conn.write("PRIVMSG #{@channel} :\001ACTION #{msg} \001")
+  end
 
   def userlist
     @users.to_a
