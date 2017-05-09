@@ -14,6 +14,9 @@ def PRIVMSG(chunks, raw)
     if chunks[0].casecmp('ACTION') == 0
       emote = true
       msg = chunks.drop(1).join(' ')
+    else
+      #silently drop any other CTCP for now
+      return
     end
   end
 
@@ -31,25 +34,3 @@ def PRIVMSG(chunks, raw)
   end
 
 end
-
-# def handle_query(chunks, raw)
-#   user_str = chunks[0]
-#   msg = chunks.drop(3).join(' ')
-#   user = user_str.split('!', 2).first
-#   ctcp = msg[0] == "\001"
-#   emote = false
-#   if ctcp
-#     ctcp_payload = msg.split("\001").last
-#     chunks = ctcp_payload.split(' ')
-#     if chunks[0].casecmp('ACTION') == 0
-#       emote = true
-#     end
-#   end
-#   command = { user: user,
-#               user_str: user_str,
-#               msg: msg,
-#               emote: emote,
-#               timestamp: Time.now }
-#
-#   emit(:query, command)
-# end
