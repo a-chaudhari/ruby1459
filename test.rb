@@ -5,7 +5,8 @@ Thread.abort_on_exception = true
 class Test
   def initialize
     irc = IrcConnection.new({
-        server:"irc.prison.net",
+        # server:"irc.prison.net",
+        server:"irc.freenode.net",
         nickname:"zelos82"
       })
 
@@ -26,6 +27,7 @@ class Test
     irc.on(:ERR_NOSUCHNICK) do |obj|
       puts "yay error hooked  "
       p obj
+
     end
 
     irc.on(:registered) do
@@ -37,13 +39,12 @@ class Test
         end
         res = chan.join
         # chan.speak("yo")
-        p res
       end
       # irc.query('tet823302','test')
 
     end
 
-    irc.on(:raw) {|msg| p msg}
+    # irc.on(:raw) {|msg| p msg}
 
     irc.connect
 

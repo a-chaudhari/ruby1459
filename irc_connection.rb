@@ -1,6 +1,5 @@
 require 'events'
 require 'socket'
-# require 'byebug'
 require 'time'
 require_relative 'irc_channel'
 require_relative 'responses'
@@ -8,7 +7,6 @@ require_relative 'handlers/ping'
 require_relative 'handlers/motd'
 require_relative 'handlers/channel'
 require_relative 'handlers/privmsg'
-require_relative 'handlers/userlist'
 require_relative 'handlers/nickname'
 
 class IrcConnection
@@ -16,7 +14,7 @@ class IrcConnection
 
   def initialize(options)
     #takes an options hash
-    @server = options[:server] ||= nil 
+    @server = options[:server] ||= nil
     @port = options[:port] ||= 6667
     @password = options[:password] ||= ""
     @nickname = options[:nickname] ||= nil
@@ -29,11 +27,11 @@ class IrcConnection
     @status = :disconnected
     @realserver = nil
     @timeout_timer = nil
-    @timeout =  300000
-    @nickTaken = false;
+    @timeout = 300000
   end
 
-  attr_reader :channels, :server, :nickname, :port, :username, :realname, :server_motd, :status
+  attr_reader :channels, :server, :nickname, :port, :username,
+              :realname, :server_motd, :status
 
   def emit(event, *args)
     Thread.new do
@@ -41,9 +39,7 @@ class IrcConnection
     end
   end
 
-  def connect
-    emit(:connecting)
-
+  def validate_url
     if @server.nil?
       emit(:connection_error)
       raise "server field cannot be nil"
@@ -52,13 +48,21 @@ class IrcConnection
     if @nickname.nil?
       emit(:connection_error)
       raise "nickname field cannot be nil"
+    elsif @nickname.length < 3
+      emit(:connection_error)
+      raise "nickname must be at least 3 characters long"
     end
 
     unless @port.is_a?(Integer) && @port > 0 && port < 65535
       emit(:connection_error)
       raise "port must be an integer greater than 0 and less than 65535"
     end
+  end
 
+  def connect
+    emit(:connecting)
+
+    validate_url
 
     begin
       @conn = TCPSocket.new @server, @port
@@ -74,7 +78,6 @@ class IrcConnection
     emit(:registering)
     self.write("PASS #{@password}") unless @password == ""
     self.write("NICK #{@nickname}")
-    #TODO handle taken nicks
     self.write("USER #{@username} * * :#{@realname}")
   end
 
@@ -98,7 +101,7 @@ class IrcConnection
 
   def read
     @read_thread = Thread.new do
-      loop{
+      loop do
         begin
           msg = @conn.gets
         rescue IOError
@@ -113,7 +116,7 @@ class IrcConnection
         msg = msg.chomp
         emit(:raw, msg)
         self.parse(msg)
-      }
+      end
       @status = :disconnected
       emit(:disconnected)
       # debugger
@@ -122,11 +125,10 @@ class IrcConnection
 
   def method_missing(m, *args)
     puts "Response #{m} is not handled"
-    p args
   end
 
   def write(msg)
-    p "writing: " + msg
+    puts "writing: " + msg
     begin
       @conn.puts(msg)
     rescue IOError
@@ -137,9 +139,9 @@ class IrcConnection
   end
 
   def parse(msg)
-
+    msg[0] = '' if msg[0] == ':'
     chunks = []
-    msg.split(':',3).each do |el|
+    msg.split(' :', 2).each do |el|
       chunks += el.split(' ')
     end
 
@@ -148,27 +150,29 @@ class IrcConnection
       puts "setting realserver to: #{@realserver}"
     end
     cmd = extract_command(chunks)
-    # p cmd
-    # p msg
+
+    if cmd.nil?
+      puts "Command extraction failed: " + msg
+      return
+    end
 
     emit(cmd, msg)
     send(cmd, chunks, msg)
   end
 
   def extract_command(chunks)
-    str = chunks.find {|el| !REPLIES[el].nil?}
-    str ? REPLIES[str] : chunks.join(' ')
+    str = chunks.find { |el| !REPLIES[el].nil? }
+    str ? REPLIES[str] : nil
   end
 
   def disconnect
     emit(:disconnecting)
     @conn.close
-    # emit(:disconnected)
   end
 
   def createChannel(channel)
     chan = IrcChannel.new(self, channel)
-    @channels[channel]=chan
+    @channels[channel] = chan
     chan
   end
 

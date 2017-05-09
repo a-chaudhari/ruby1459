@@ -12,7 +12,7 @@ class IrcChannel
 
     @conn = conn
     @channel = channel
-    @status=:parted
+    @status = :parted
     @waiting = true
     @users = Set.new
     @topic = ""
@@ -36,16 +36,16 @@ class IrcChannel
   def topic=(topic)
     return if topic == @topic
 
-    @topic=topic
-    emit(:new_topic,{
-        channel: @channel,
-        timestamp: Time.now,
-        topic: @topic
-      })
+    @topic = topic
+    command = { channel: @channel,
+                timestamp: Time.now,
+                topic: @topic }
+
+    emit(:new_topic, command)
   end
 
   def part
-    @status=:parted
+    @status = :parted
     @waiting = true
     @users = Set.new
     @mode = ""
@@ -57,16 +57,13 @@ class IrcChannel
     @conn.write("PRIVMSG #{@channel} :#{msg}")
   end
 
-  def emote(msg)
-
-  end
+  def emote(msg) end
 
   def userlist
     @users.to_a
   end
 
   def _recv(type, data)
-    # p @users
     emit(type, data)
   end
 
