@@ -102,6 +102,10 @@ class IrcConnection
     write("PRIVMSG #{nickname} #{msg}")
   end
 
+  def query_emote(nickname, msg)
+    write("PRIVMSG #{nickname} :\001ACTION #{msg} \001")
+  end
+
   def read
     @read_thread = Thread.new do
       loop do
