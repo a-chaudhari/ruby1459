@@ -16,7 +16,7 @@ def JOIN(chunks, raw)
   channel_obj.users.merge!(nick_hash(user))
   channel_obj._recv(:userlist_changed, nil)
   command = {
-    user: user,
+    user: nick,
     user_str: user_str,
     channel: channel,
     timestamp: Time.now

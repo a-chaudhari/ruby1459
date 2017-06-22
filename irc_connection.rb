@@ -111,7 +111,7 @@ class IrcConnection
       loop do
         begin
           msg = @conn.gets
-        rescue IOError
+        rescue
           emit(:disconnected)
           @status = :disconnected0
           puts 'disconnected due to IOError'
